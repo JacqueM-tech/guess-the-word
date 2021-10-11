@@ -32,14 +32,20 @@ placeholderWord(word);
 button.addEventListener("click", function (e) {
     e.preventDefault();
 // Inside the event handler function for the Guess button, empty the text of the message element.
-    message.innerText = "";
+playerGuessedLetter.innerText = "";
 // Create and name a variable to capture the value of the input. Log out the value of the variable capturing the input. Then, empty the value of the input. You should see the letter you enter into the input field in the console when the Guess button is clicked. 
-const guessInputValue = letterInput.Value;
-// console.log(guessInputValue);
-letterInput.value = "";
-// At the bottom of the event handler, call the function you made that checks the input, and pass it the input value as an argument. Save the result of this function call to a variable and log it out to the console.
-const rightGuess = validateInput(guess);
+const guessValue = letterInput.value;
+// console.log(guessValue);
 
+// At the bottom of the event handler, call the function you made that checks the input, and pass it the input value as an argument. Save the result of this function call to a variable and log it out to the console.
+const rightGuess = validateInput(guessValue);
+// console.log(rightGuess);
+
+// Return to the event handler for the Guess button. Make sure that the variable mapped to the result of the function validates that the player’s input is returning a letter (as opposed to “undefined”). If it’s returning a letter, pass it as an argument to your makeGuess function.
+    if (rightGuess) {
+        makeGuess(guessValue);
+    } 
+    letterInput.value = "";
 });
 
 // Create and name a function that accepts the input value as a parameter. This function’s purpose is to validate the player’s input.
@@ -55,4 +61,19 @@ const validateInput = function (input) {
     } else {
         return input;
     } 
+};
+
+// Below the function that checks input, create a new function called makeGuess that accepts a letter as the parameter. 
+// JavaScript is case sensitive, so it sees uppercase and lowercase letters as different characters. The easiest way to handle case-sensitivity is to convert all letters to one casing. We recommend converting your letter parameter to uppercase. Once the letter transforms to uppercase, check to see if your guessedLetters array already contains that letter.
+const makeGuess = function (guessValue) {
+    guessValue = guessValue.toUpperCase();
+// If the player already guessed the same letter, update the message to inform the player they’ve already guessed that letter and try again. If they haven’t guessed that letter before, add the letter to the guessedLetters array.
+if (guessedLetters.includes(guessValue)) {
+    message.innerText = "You've already guessed that letter.";
+} else {
+    guessedLetters.push(guessValue);
+    // Log out the guessedLetters array to the console.
+    console.log(guessedLetters);
+}
+
 };

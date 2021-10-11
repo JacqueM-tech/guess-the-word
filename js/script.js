@@ -1,5 +1,4 @@
 // Create global variables
-
 const guessedLettersElement = document.querySelector(".guessed-letters"); // Unordered list where the player’s guessed letters will appear.
 const button = document.querySelector(".guess"); // The button with the text “Guess!” in it. 
 const letterInput = document.querySelector(".letter"); // The text input where the player will guess a letter.
@@ -20,10 +19,10 @@ const placeholderWord = function (word) {
     const placeholderLetters = [];
     for (const letter of word) {
         console.log(letter);
-        placeholderLetters.push = "●";
+        placeholderLetters.push("●");
     }
 // Call the function and pass it the word variable as the argument. You should see 8 circle symbols on the screen, one for each letter in the word “magnolia.” Hint: You’ll need to use an array and then join it back to a string using the .join("") method.
-wordsInProgressText.innerText = placeholderLetters.join("");
+wordInProgress.innerText = placeholderLetters.join("");
 };
 
 placeholderWord(word);

@@ -74,6 +74,43 @@ if (guessedLetters.includes(guessValue)) {
     guessedLetters.push(guessValue);
     // Log out the guessedLetters array to the console.
     console.log(guessedLetters);
-}
+// Call the function inside the else statement of the makeGuess function so the letter displays when it hasn’t been guessed before.
+    playerGuesses();
+    updateWordInProgress(guessedLetters);
+  }
+};
 
+// Create and name a function to update the page with the letters the player guesses. Empty the innerHTML of the unordered list where the player’s guessed letters will display. Create a new list item for each letter inside your guessedLetters array (i.e., the global variable) and add it to the unordered list. 
+const playerGuesses = function () {
+    guessedLettersElement.innerHTML = "";
+    for (const letter of guessedLetters) {
+        const li = document.createElement("li");
+        li.innerText = letter;
+        guessedLettersElement.append(li);
+    }
+};
+
+// Create and name a function to update the word in progress that accepts the guessedLetters array as a parameter. This function will replace the circle symbols with the correct letters guessed. Create a variable called wordUpper to change the word variable to uppercase. On the following line, create a variable to split the word string into an array so that the letter can appear in the guessedLetters array: const wordArray = wordUpper.split("");. Then, log out wordArray to see what this does!
+const updateWordInProgress = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const revealWord = [];
+    for (const letter of wordArray) {
+    if (guessedLetters.includes(letter)) {
+        revealWord.push(letter.toUpperCase());
+    } else {
+        revealWord.push("●");
+    }
+  }
+ //console.log(revealWord); 
+    wordInProgress.innerText = revealWord.join("");
+    didPlayerWin();
+};
+
+// Create and name a function to check if the player successfully guessed the word and won the game. Begin by verifying if their word in progress matches the word they should guess. If the player has won, add the “win” class to the empty paragraph where messages appear when they guess the letter. Also, update the paragraph’s contents to: <p class="highlight">You guessed correct the word! Congrats!</p>.
+const didPlayerWin = function () {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight>You guessed the correct word! YEAH! </p>`;
+    }
 };

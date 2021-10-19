@@ -15,7 +15,7 @@ let word = "magnolia";
 const guessedLetters = [];
 
 // Create a global variable called remainingGuesses and set it to a value of 8. The value 8 is the maximum number of guesses the player can make.
-let remainingGuesses = 10;
+let remainingGuesses = 8;
 
 // add an async function called getWord() to fetch data from a file at this address: “https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt” The difference here is that you’re fetching data from a text file instead of a JSON file. In the second await statement, use .text() instead of .json(). 
 const getWord = async function () {
@@ -179,24 +179,21 @@ const startOver = function () {
 };
 // Call the startOver function when the game is over whether the player wins or loses. Test the game to be sure the Guess button, the paragraph with remaining guesses, and the guessed letters disappear when the player wins or loses. Also, check that the Play Again button appears so that players give the game another try. The Play Again button won’t do anything quite yet, but you’ll get to that next!
 
-// Add a click event listener for the Play Again button. Remove the class of “win” applied to the message element. Empty the message text and the unordered list where the guessed letters appear.
+// Add a click event listener for the Play Again button. Remove the class of “win” applied to the message element. Empty the message text and the unordered list where the guessed letters appear. Set the remaining guess back to 8 or whichever number of guesses you decided on. Set your guessedLetter global variable back to an empty array. Populate the text of the span inside the paragraph where the remaining guesses display with the new amount of guesses. Show the Guess button, the paragraph with remaining guesses, and the guessed letters once more. Hide the Play Again button. Call the getWord() async function that pulls the new word so the player can play again!
 playAgainButton.addEventListener("click", function () {
     message.classList.remove("win");
-    message.innerHTML = "";
-    guessedLettersElement.innerHTML = "";
-
-// Set the remaining guess back to 8 or whichever number of guesses you decided on. Set your guessedLetter global variable back to an empty array. Populate the text of the span inside the paragraph where the remaining guesses display with the new amount of guesses. Show the Guess button, the paragraph with remaining guesses, and the guessed letters once more. Hide the Play Again button. Call the getWord() async function that pulls the new word so the player can play again!
-    remainingGuessesElement = 10;
     guessedLetters = [];
+    remainingGuesses = 8;
     remainingGuessesSpan.innerText = `${remainingGuesses} guesses`; 
+    guessedLettersElement.innerHTML = "";
+    message.innerText = "";
+
+    getWord();
 
     button.classList.remove("hide");
     remainingGuessesElement.classList.remove("hide");
     guessedLettersElement.classList.remove("hide")
     playAgainButton.classList.add("hide");
-
-    getWord();
-
 });
 
 

@@ -1,6 +1,6 @@
 // Create global variables
 const guessedLettersElement = document.querySelector(".guessed-letters"); // Unordered list where the player’s guessed letters will appear.
-const button = document.querySelector(".guess"); // The button with the text “Guess!” in it. 
+const guessLetterButton = document.querySelector(".guess"); // The button with the text “Guess!” in it. 
 const letterInput = document.querySelector(".letter"); // The text input where the player will guess a letter.
 const wordInProgress = document.querySelector(".word-in-progress"); // The empty paragraph where the word in progress will appear.
 const remainingGuessesElement = document.querySelector(".remaining"); // The paragraph where the remaining guesses will display.
@@ -12,19 +12,17 @@ const playAgainButton = document.querySelector (".play-again"); // The hidden bu
 let word = "magnolia";
 
 // create another global variable called guessedLetters with an empty array. This array will contain all the letters the player guesses. 
-const guessedLetters = [];
+let guessedLetters = [];
 
 // Create a global variable called remainingGuesses and set it to a value of 8. The value 8 is the maximum number of guesses the player can make.
 let remainingGuesses = 8;
 
 // add an async function called getWord() to fetch data from a file at this address: “https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt” The difference here is that you’re fetching data from a text file instead of a JSON file. In the second await statement, use .text() instead of .json(). 
 const getWord = async function () {
-    const res = await fetch ("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
-    const words = await res.text();  
-    // console.log(data); 
-
+    const response = await fetch ("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
+    const words = await response.text();  
     const wordArray = words.split("\n");
-    console.log(wordArray);
+    // console.log(wordArray);
     const randomIndex = Math.floor(Math.random() * wordArray.length);
     word = wordArray[randomIndex].trim();
     placeholderWord(word);
@@ -48,7 +46,7 @@ getWord();
 const placeholderWord = function (word) {
     const placeholderLetters = [];
     for (const letter of word) {
-        console.log(letter);
+        // console.log(letter);
         placeholderLetters.push("●");
     }
 // Call the function and pass it the word variable as the argument. You should see 8 circle symbols on the screen, one for each letter in the word “magnolia.” Hint: You’ll need to use an array and then join it back to a string using the .join("") method.
@@ -59,7 +57,7 @@ wordInProgress.innerText = placeholderLetters.join("");
 
 // Add an event listener for when a player clicks the Guess button. In the callback function, add a parameter for the event: e.
 // Because you’re working with a form, you want to prevent the default behavior of clicking a button, the form submitting, and then reloading the page. To prevent this reloading behavior, add this line of code at the top of the callback function: e.preventDefault();.
-button.addEventListener("click", function (e) {
+guessLetterButton.addEventListener("click", function (e) {
     e.preventDefault();
 // Inside the event handler function for the Guess button, empty the text of the message element.
 message.innerText = "";
@@ -99,7 +97,7 @@ const makeGuess = function (guess) {
     guess = guess.toUpperCase();
 // If the player already guessed the same letter, update the message to inform the player they’ve already guessed that letter and try again. If they haven’t guessed that letter before, add the letter to the guessedLetters array.
 if (guessedLetters.includes(guess)) {
-    message.innerText = "You've already guessed that letter.";
+    message.innerText = "You've already guessed that letter. Try again.";
 } else {
     guessedLetters.push(guess);
     // Log out the guessedLetters array to the console.
@@ -107,13 +105,13 @@ if (guessedLetters.includes(guess)) {
 // In the else clause of your makeGuess function, before the call to the function that will update the word in progress, call your new function to update the remaining guesses and pass it the letter that the player guessed as an argument.
     updateGuessesRemaining(guess);
 // Call the function inside the else statement of the makeGuess function so the letter displays when it hasn’t been guessed before.
-    playerGuesses();
+    showGuessedLetters();
     updateWordInProgress(guessedLetters);
   }
 };
 
 // Create and name a function to update the page with the letters the player guesses. Empty the innerHTML of the unordered list where the player’s guessed letters will display. Create a new list item for each letter inside your guessedLetters array (i.e., the global variable) and add it to the unordered list. 
-const playerGuesses = function () {
+const showGuessedLetters = function () {
     guessedLettersElement.innerHTML = "";
     for (const letter of guessedLetters) {
         const li = document.createElement("li");
@@ -137,7 +135,7 @@ const updateWordInProgress = function (guessedLetters) {
   }
  //console.log(revealWord); 
     wordInProgress.innerText = revealWord.join("");
-    didPlayerWin();
+    checkIfWin();
 };
 
 // Create and name a new function that will accept the guess input as a parameter. In the code, place this function before the function that checks if the player won. In the function, grab the word and make it uppercase. Because the player’s guess is uppercase, making the word they’re guessing uppercase will compare letters with the same casing. Find out if the word contains the guessedLetter. If it doesn’t include the letter from guess, let the player know that the word doesn’t contain the letter and subtract 1 from their remainingGuesses. If it does contain a letter, let the player know the letter is in the word.
@@ -147,21 +145,21 @@ const updateGuessesRemaining = function(guess) {
         message.innerText = `Sorry, the word has no ${guess}.`;
         remainingGuesses -= 1;
     } else {
-        message.innerText = `Good guess! The word has the letter ${guess}`;
+        message.innerText = `Good guess! The word has the letter ${guess}.`;
     }
 //  Below the conditional statement, determine if the remainingGuesses is a value of 0. If they have no guesses remaining, update the message to say the game is over and what the word is. If they have 1 guess, update the span inside the paragraph where the remaining guesses will display to tell the player they have one guess remaining. If they have more than one guess, update the same span element to tell them the number of guesses remaining.
     if (remainingGuesses === 0) {
-        message.innerHTML = `Game is over! The word was <span class="highlight">${word}</span>`;
-        remainingGuessesElement.innerText = "Try again later";
+        message.innerHTML = `Game is over! The word was <span class="highlight">${word}</span>.`;
+        startOver();
         } else if (remainingGuesses === 1) {
-            remainingGuessesElement.innerText = `${remainingGuesses} guess`;
+            remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
         } else {
             remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
         }        
     };
 
 // Create and name a function to check if the player successfully guessed the word and won the game. Begin by verifying if their word in progress matches the word they should guess. If the player has won, add the “win” class to the empty paragraph where messages appear when they guess the letter. Also, update the paragraph’s contents to: <p class="highlight">You guessed correct the word! Congrats!</p>.
-const didPlayerWin = function () {
+const checkIfWin = function () {
     if (word.toUpperCase() === wordInProgress.innerText) {
         message.classList.add("win");
         message.innerHTML = `<p class="highlight>You guessed the correct word! YEAH!</p>`;
@@ -172,7 +170,7 @@ const didPlayerWin = function () {
 
 // At the bottom of the script.js file, create a function called startOver to hide: the Guess button, the paragraph where the remaining guesses will display, the unordered list where the guessed letters appear. Use the startOver function to show the button to play again.
 const startOver = function () {
-    button.classList.add("hide");
+    guessLetterButton.classList.add("hide");
     remainingGuessesElement.classList.add("hide");
     guessedLettersElement.classList.add("hide")
     playAgainButton.classList.remove("hide");
@@ -190,10 +188,11 @@ playAgainButton.addEventListener("click", function () {
 
     getWord();
 
-    button.classList.remove("hide");
+    guessLetterButton.classList.remove("hide");
+    playAgainButton.classList.add("hide");
     remainingGuessesElement.classList.remove("hide");
     guessedLettersElement.classList.remove("hide")
-    playAgainButton.classList.add("hide");
+    
 });
 
 

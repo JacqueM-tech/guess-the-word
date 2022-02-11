@@ -12,7 +12,7 @@ body {
   font-size: 30px;
   line-height: 150%;
   background-color: #dff6f6;
-  background-image: url("../img/main.png");
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)), url("../img/main.png");
   background-size: cover;
   background-repeat: no-repeat;
   color: #1e3030;
@@ -136,7 +136,7 @@ input:focus {
   color: white;
 }
 
-/* animatied background */
+/* animated background */
 .win {
   padding: 0 1em;
   background: linear-gradient(-45deg, #ff9d64, #f5620c);
